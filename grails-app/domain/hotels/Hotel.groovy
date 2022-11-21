@@ -3,7 +3,7 @@ package hotels
 class Hotel {
     String name
     Integer stars
-//    Country country
+    Country country
     static belongsTo = [country: Country]
     static constraints = {
     }
