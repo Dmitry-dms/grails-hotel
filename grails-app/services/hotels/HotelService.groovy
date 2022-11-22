@@ -15,4 +15,5 @@ interface HotelService {
 
     Hotel save(Hotel hotel)
 
+
 }
