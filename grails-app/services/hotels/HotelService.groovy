@@ -1,19 +1,71 @@
 package hotels
 
-import grails.gorm.services.Service
+import grails.web.servlet.mvc.GrailsParameterMap
 
-@Service(Hotel)
-interface HotelService {
+class HotelService {
+    List<Hotel> list(GrailsParameterMap params) {
+        return Hotel.list(params)
+    }
 
-    Hotel get(Serializable id)
+    List<Hotel> allHotels = Hotel.list()
+    String selectedCountry, searchString
 
-    List<Hotel> list(Map args)
+    List<Hotel> findHotelsSubstring(GrailsParameterMap params) {
+        if (params.search_subsctr != null) {
+            searchString = params.search_subsctr
+        }
+        if (params.selectedCountry != null) {
+            selectedCountry = params.selectedCountry
+        }
+        ArrayList<Hotel> results
+        def c = Hotel.createCriteria()
+        if (selectedCountry == "") {
+            results = c.list {
+                like("name", "%$searchString%")
+                and {
+                    order("stars", "desc")
+                    order("name", "asc")
+                }
+            }
+        } else {
+            results = c.list {
+                like("name", "%$searchString%")
+                eq("country", Country.findByName(selectedCountry))
+                and {
+                    order("stars", "desc")
+                    order("name", "asc")
+                }
+            }
+        }
+        results
+    }
 
-    Long count()
+    List<Hotel> getPaginated(GrailsParameterMap params, List<Hotel> hotels) {
+        params.max = params.max ?: 10
+        params.offset = params.offset ?: 0
+        if (params.max instanceof String) {
+            params.max = Integer.parseInt(params.max)
+        }
+        if (params.offset instanceof String) {
+            params.offset = Integer.parseInt(params.offset)
+        }
+        hotels.drop(params.offset).take(params.max) as List<Hotel>
+    }
 
-    void delete(Serializable id)
+    int count() {
+        Hotel.count()
+    }
 
-    Hotel save(Hotel hotel)
+    Hotel get(Serializable id) {
+        return Hotel.get(id)
+    }
 
+    void delete(Serializable id) {
+        Hotel.delete(id)
+    }
+
+    Hotel save(Hotel hotel) {
+        return Hotel.update(hotel)
+    }
 
 }

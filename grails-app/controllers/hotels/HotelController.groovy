@@ -11,7 +11,21 @@ class HotelController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond hotelService.list(params), model:[hotelCount: hotelService.count()]
+        def res = hotelService.list(params)
+        respond res, model: [hotels    : res,
+                             countries : Country.list(),
+                             hotelCount: hotelService.count()]
+    }
+
+    def findHotels(Integer max) {
+
+        ArrayList<Hotel> results = hotelService.findHotelsSubstring(params)
+        ArrayList<Hotel> paginated = hotelService.getPaginated(params, results)
+
+        render(view: "findHotels",model: [hotels    : paginated,
+                        countries : Country.list(),
+                        hotelCount: results.size()], searchString: hotelService.searchString,
+                selectedCountry: hotelService.selectedCountry)
     }
 
     def show(Long id) {
@@ -31,7 +45,7 @@ class HotelController {
         try {
             hotelService.save(hotel)
         } catch (ValidationException e) {
-            respond hotel.errors, view:'create'
+            respond hotel.errors, view: 'create'
             return
         }
 
@@ -57,7 +71,7 @@ class HotelController {
         try {
             hotelService.save(hotel)
         } catch (ValidationException e) {
-            respond hotel.errors, view:'edit'
+            respond hotel.errors, view: 'edit'
             return
         }
 
@@ -66,7 +80,7 @@ class HotelController {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'hotel.label', default: 'Hotel'), hotel.id])
                 redirect hotel
             }
-            '*'{ respond hotel, [status: OK] }
+            '*' { respond hotel, [status: OK] }
         }
     }
 
@@ -81,9 +95,9 @@ class HotelController {
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'hotel.label', default: 'Hotel'), id])
-                redirect action:"index", method:"GET"
+                redirect action: "index", method: "GET"
             }
-            '*'{ render status: NO_CONTENT }
+            '*' { render status: NO_CONTENT }
         }
     }
 
@@ -93,7 +107,7 @@ class HotelController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'hotel.label', default: 'Hotel'), params.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+            '*' { render status: NOT_FOUND }
         }
     }
 }

@@ -11,7 +11,19 @@ class CountryController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond countryService.list(params), model:[countryCount: countryService.count()]
+        def res = countryService.list(params)
+        respond res, model: [countries    : res,
+                             countriesCount: countryService.count()]
+    }
+
+    def findCountries(Integer max) {
+
+        ArrayList<Country> results = countryService.findCountrySubstring(params)
+        ArrayList<Country> paginated = countryService.getPaginated(params, results)
+
+        render(view: "index", model: [countries     : paginated,
+                                      countriesCount: results.size()], searchString: countryService.searchString,
+                )
     }
 
     def show(Long id) {
@@ -31,14 +43,14 @@ class CountryController {
         try {
             countryService.save(country)
         } catch (ValidationException e) {
-            respond country.errors, view:'create'
+            respond country.errors, view: 'create'
             return
         }
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.created.message', args: [message(code: 'country.label', default: 'Country'), country.id])
-                redirect country
+                redirect(action: "index")
             }
             '*' { respond country, [status: CREATED] }
         }
@@ -48,25 +60,24 @@ class CountryController {
         respond countryService.get(id)
     }
 
-    def update(Country country) {
-        if (country == null) {
+    def update(Long id) {
+        if (id == null) {
             notFound()
             return
         }
-
         try {
-            countryService.save(country)
+            countryService.update(id, params)
         } catch (ValidationException e) {
-            respond country.errors, view:'edit'
+            respond country.errors, view: 'edit'
             return
         }
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'country.label', default: 'Country'), country.id])
-                redirect country
+//                flash.message = message(code: 'default.updated.message', args: [message(code: 'country.label', default: 'Country'), country.id])
+                redirect(action: "index")
             }
-            '*'{ respond country, [status: OK] }
+            '*' { respond country, [status: OK] }
         }
     }
 
@@ -75,15 +86,14 @@ class CountryController {
             notFound()
             return
         }
-
         countryService.delete(id)
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'country.label', default: 'Country'), id])
-                redirect action:"index", method:"GET"
+                redirect action: "index", method: "GET"
             }
-            '*'{ render status: NO_CONTENT }
+            '*' { render status: NO_CONTENT }
         }
     }
 
@@ -93,7 +103,7 @@ class CountryController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'country.label', default: 'Country'), params.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+            '*' { render status: NOT_FOUND }
         }
     }
 }

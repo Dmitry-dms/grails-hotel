@@ -1,7 +1,7 @@
 package hotels
 
 class Hotel {
-    String name
+    String name,site
     Integer stars
     Country country
     static belongsTo = [country: Country]

@@ -13,7 +13,7 @@ class BootStrap {
         for (i in 0..<100) {
             Integer r = rnd.nextInt(countries.size()-1)
             cnt = countries.get(r) as Country
-            new Hotel(name: "Hotel ${i}",stars: rnd.nextInt(6),country: cnt).save()
+            new Hotel(name: "Hotel ${i}",site: 'https://', stars: rnd.nextInt(6),country: cnt).save()
         }
     }
     def destroy = {

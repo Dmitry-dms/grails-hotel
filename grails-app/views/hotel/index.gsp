@@ -1,28 +1,34 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'hotel.label', default: 'Hotel')}" />
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
-    </head>
-    <body>
-        <a href="#list-hotel" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-        <div class="nav" role="navigation">
-            <ul>
-                <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-                <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-            </ul>
-        </div>
-        <div id="list-hotel" class="content scaffold-list" role="main">
-            <h1><g:message code="default.list.label" args="[entityName]" /></h1>
-            <g:if test="${flash.message}">
-                <div class="message" role="status">${flash.message}</div>
-            </g:if>
-            <f:table collection="${hotelList}" />
-
-            <div class="pagination">
-                <g:paginate total="${hotelCount ?: 0}" />
+<head>
+    <meta name="layout" content="main"/>
+    <g:set var="entityName" value="${message(code: 'hotel.label', default: 'Hotel')}"/>
+    <title><g:message code="default.list.label" args="[entityName]" /></title>
+</head>
+<body>
+<div style="display: flex;align-items: center">
+    <div class="index-h">Начните поиск</div>
+</div>
+<!--    <h1>Начните поиск...</h1>-->
+<!--</div>-->
+<section class="row colset-2-its">
+    <form action="/hotel/findHotels" method="post" style="margin:30px auto;width: auto">
+        <form class="card p-2" style="margin: 50px">
+            <div class="input-group" style="width: 600px">
+                <g:textField class="form-control" style="width: 200px" name="search_subsctr" value="${searchString}"/>
+                <g:select class="form-control" name="selectedCountry"
+                          from="${countries}"
+                          value="${params.selection}"
+                          optionValue="name"
+                          optionKey="name"
+                          noSelection="['':'Любая']"
+                />
+                <button type="submit" class="btn btn-secondary">Найти</button>
             </div>
-        </div>
-    </body>
+        </form>
+    </form>
+
+</section>
+</body>
+
 </html>

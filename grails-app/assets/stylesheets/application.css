@@ -11,5 +11,8 @@
 *= require grails
 *= require main
 *= require mobile
+*= require table
+*= require hotel
+*= require country
 *= require_self
 */

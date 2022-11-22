@@ -1,0 +1,39 @@
+.fab {
+   position:fixed;
+   top:0;
+   right:0;
+   margin-right: 100px;
+   margin-top: 100px;
+}
+
+
+.index-h{
+margin: 0 auto;
+font-family: monospace;
+  font-weight: bold;
+   font-size: 30px;
+}
+
+.index-h:after {
+
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+
+  -webkit-animation: ellipsis steps(4,end) 1000ms infinite;
+  animation: ellipsis steps(4,end) 4000ms infinite;
+  content: "\2026"; /* ascii code for the ellipsis character */
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 20px;
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 20px;
+  }
+}
