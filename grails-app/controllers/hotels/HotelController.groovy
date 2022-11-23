@@ -23,24 +23,23 @@ class HotelController {
                              hotelsCount: hotelService.count()]
     }
 
-    // TODO(@Dmitry-dms): Есть ли возможность переиспользовать index?
+    // Используется в поиске со справочника отелей
     def showHotels(Integer max) {
         ArrayList<Hotel> results = hotelService.findHotelsSubstring(params)
         ArrayList<Hotel> paginated = hotelService.getPaginated(params, results)
         render(view: "index", model: [hotels     : paginated,
-                                      hotelsCount: results.size()], searchString: hotelService.searchString,
+                                      hotelsCount: results.size(), searchString: hotelService.searchString]
         )
+        hotelService.searchString = ""
     }
 
+    // Используется в поиске с главной страницы
     def findHotels(Integer max) {
         ArrayList<Hotel> results = hotelService.findHotelsSubstring(params)
         ArrayList<Hotel> paginated = hotelService.getPaginated(params, results)
         render(view: "findHotels",
                 model: [hotels    : paginated,
-                        countries : Country.list(),
-                        hotelCount: results.size()],
-                        searchString: hotelService.searchString,
-                        selectedCountry: hotelService.selectedCountry)
+                        hotelCount: results.size()])
         hotelService.searchString = ""
     }
 

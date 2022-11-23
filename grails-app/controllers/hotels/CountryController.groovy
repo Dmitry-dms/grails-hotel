@@ -22,8 +22,8 @@ class CountryController {
         ArrayList<Country> paginated = countryService.getPaginated(params, results)
 
         render(view: "index", model: [countries     : paginated,
-                                      countriesCount: results.size()], searchString: countryService.searchString,
-                )
+                                      countriesCount: results.size(),
+                                      searchString: countryService.searchString])
     }
 
 

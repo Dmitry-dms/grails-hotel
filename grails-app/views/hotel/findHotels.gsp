@@ -34,7 +34,7 @@
         </table>
         <g:if test="${hotelCount > 10}">
             <div class="pagination pag">
-                <g:paginate total="${hotelCount ?: 0}"/>
+                <g:paginate total="${hotelCount ?: 0}" next="Вперед" prev="Назад"/>
             </div>
         </g:if>
     </g:else>
