@@ -26,34 +26,19 @@ class CountryController {
                 )
     }
 
-    def show(Long id) {
-        respond countryService.get(id)
-    }
 
     def create() {
         respond new Country(params)
     }
 
-    def save(Country country) {
-        if (country == null) {
-            notFound()
-            return
-        }
-
+    def save() {
         try {
-            countryService.save(country)
+            countryService.save(params)
         } catch (ValidationException e) {
             respond country.errors, view: 'create'
             return
         }
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'country.label', default: 'Country'), country.id])
-                redirect(action: "index")
-            }
-            '*' { respond country, [status: CREATED] }
-        }
+        redirect(action: "index")
     }
 
     def edit(Long id) {
@@ -71,14 +56,7 @@ class CountryController {
             respond country.errors, view: 'edit'
             return
         }
-
-        request.withFormat {
-            form multipartForm {
-//                flash.message = message(code: 'default.updated.message', args: [message(code: 'country.label', default: 'Country'), country.id])
-                redirect(action: "index")
-            }
-            '*' { respond country, [status: OK] }
-        }
+        redirect(action: "index")
     }
 
     def delete(Long id) {
@@ -88,13 +66,7 @@ class CountryController {
         }
         countryService.delete(id)
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'country.label', default: 'Country'), id])
-                redirect action: "index", method: "GET"
-            }
-            '*' { render status: NO_CONTENT }
-        }
+        redirect action: "index", method: "GET"
     }
 
     protected void notFound() {

@@ -23,13 +23,12 @@
             <g:link class="nav-item" controller="hotel" action="index">Справочник отелей</g:link>
         </ul>
     </header>
+    <div class="h-divider"></div>
 </div>
 
 <div class="container-fluid">
     <g:layoutBody/>
 </div>
-
-
 
 <asset:javascript src="application.js"/>
 

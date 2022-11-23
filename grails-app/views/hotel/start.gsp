@@ -2,8 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <g:set var="entityName" value="${message(code: 'hotel.label', default: 'Hotel')}"/>
-    <title><g:message code="default.list.label" args="[entityName]" /></title>
+    <title>Главная</title>
 </head>
 <body>
 <div style="display: flex;align-items: center">

@@ -12,8 +12,8 @@
         </g:if>
         <g:form resource="${this.country}" method="POST">
                 <fieldset class="form">
-                    <f:field bean="country" property="name"/>
-                    <f:field bean="country" property="capital"/>
+                    <f:field bean="country" property="name" label="Название"/>
+                    <f:field bean="country" property="capital" label="Столица"/>
                     <form action="save" method="post" style="margin-top:20px">
                         <button type="submit" class="btn pmd-btn-raised pmd-ripple-effect btn-primary" style="margin-top:20px; right:0;">Создать</button>
                     </form>

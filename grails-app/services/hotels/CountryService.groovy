@@ -2,14 +2,13 @@ package hotels
 
 import grails.web.servlet.mvc.GrailsParameterMap
 
-import javax.transaction.Transactional
 
 class CountryService {
     List<Country> list(GrailsParameterMap params) {
         return Country.list(params)
     }
 
-    String searchString
+    String searchString = ""
 
     List<Country> findCountrySubstring(GrailsParameterMap params) {
         if (params.search_subsctr != null) {
@@ -39,7 +38,8 @@ class CountryService {
         Country.count()
     }
 
-    def save(Country country) {
+    def save(GrailsParameterMap params) {
+        Country country = new Country(params)
         if (!country.save(flush: true)) {
             country.errors.each {
                 println it
@@ -54,7 +54,11 @@ class CountryService {
     def update(Long id, GrailsParameterMap params) {
         Country country = get(id) as Country
         country.properties = params
-        save(country)
+        if (!country.save(flush: true)) {
+            country.errors.each {
+                println it
+            }
+        }
     }
 
     def delete(Long id) {

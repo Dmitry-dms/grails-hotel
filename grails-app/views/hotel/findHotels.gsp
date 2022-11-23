@@ -1,8 +1,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <g:set var="entityName" value="${message(code: 'hotel.label', default: 'Hotel')}"/>
-    <title><g:message code="default.list.label" args="[entityName]" /></title>
+    <title>Справочник отелей</title>
 </head>
 <body>
 <div id="content" role="main" style="background-color: #F5F5F5;">
@@ -15,6 +14,9 @@
         </div>
     </g:if>
     <g:else>
+        <g:if test="${hotelCount != 0}">
+            <div class="message" role="status">Найдено ${hotelCount} отелей</div>
+        </g:if>
         <table class="custom">
             <thead>
             <tr class="custom">

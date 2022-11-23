@@ -2,8 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <g:set var="entityName" value="${message(code: 'country.label', default: 'Country')}"/>
-    <title><g:message code="default.list.label" args="[entityName]" /></title>
+    <title>Справочник стран</title>
 </head>
 <body>
 <section class="row colset-2-its">

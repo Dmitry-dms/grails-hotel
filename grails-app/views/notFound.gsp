@@ -7,8 +7,8 @@
     </head>
     <body>
         <ul class="errors">
-            <li>Error: Page Not Found (404)</li>
-            <li>Path: ${request.forwardURI}</li>
+            <li>Ошибка: Страница не найдена (404)</li>
+            <li>Путь: ${request.forwardURI}</li>
         </ul>
     </body>
 </html>
