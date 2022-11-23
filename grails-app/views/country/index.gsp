@@ -16,20 +16,22 @@
         </form>
     </form>
 </section>
-<div id="content" role="main">
+<div id="content" role="main" style="background-color: #F5F5F5;">
     <div style="display: flex;align-items: end">
         <form action="/country/create" method="post" class="create">
             <button type="submit" class="btn pmd-btn-raised pmd-ripple-effect btn-primary">Создать</button>
         </form>
     </div>
     <g:if test="${countriesCount == 0}">
-        <h1>Список стран пуст</h1>
+        <div style="display: flex;align-items: center; margin-top:20px">
+            <div class="h1-h">Список стран пуст</div>
+        </div>
     </g:if>
     <g:else>
-        <table class="custom">
+        <table class="custom" style="margin-top:20px">
             <thead>
             <tr class="custom">
-                <th class="custom" scope="col">Название</th>
+                <th class="custom" scope="col">Страна</th>
                 <th class="custom" scope="col">Столица</th>
             </tr>
             </thead>

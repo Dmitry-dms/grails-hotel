@@ -9,23 +9,39 @@ class HotelController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    // Отображается на главной
+    def start() {
+        render(view: "start", model: [countries   : Country.list(),
+                                      searchString: hotelService.searchString])
+    }
+
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         def res = hotelService.list(params)
-        respond res, model: [hotels    : res,
-                             countries : Country.list(),
-                             hotelCount: hotelService.count()]
+        respond res, model: [hotels     : res,
+                             countries  : Country.list(),
+                             hotelsCount: hotelService.count()]
+    }
+
+    // TODO(@Dmitry-dms): Есть ли возможность переиспользовать index?
+    def showHotels(Integer max) {
+        ArrayList<Hotel> results = hotelService.findHotelsSubstring(params)
+        ArrayList<Hotel> paginated = hotelService.getPaginated(params, results)
+        render(view: "index", model: [hotels     : paginated,
+                                      hotelsCount: results.size()], searchString: hotelService.searchString,
+        )
     }
 
     def findHotels(Integer max) {
-
         ArrayList<Hotel> results = hotelService.findHotelsSubstring(params)
         ArrayList<Hotel> paginated = hotelService.getPaginated(params, results)
-
-        render(view: "findHotels",model: [hotels    : paginated,
+        render(view: "findHotels",
+                model: [hotels    : paginated,
                         countries : Country.list(),
-                        hotelCount: results.size()], searchString: hotelService.searchString,
-                selectedCountry: hotelService.selectedCountry)
+                        hotelCount: results.size()],
+                        searchString: hotelService.searchString,
+                        selectedCountry: hotelService.selectedCountry)
+        hotelService.searchString = ""
     }
 
     def show(Long id) {
@@ -36,52 +52,32 @@ class HotelController {
         respond new Hotel(params)
     }
 
-    def save(Hotel hotel) {
-        if (hotel == null) {
-            notFound()
-            return
-        }
-
+    def save() {
         try {
-            hotelService.save(hotel)
+            hotelService.save(params)
         } catch (ValidationException e) {
             respond hotel.errors, view: 'create'
             return
         }
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'hotel.label', default: 'Hotel'), hotel.id])
-                redirect hotel
-            }
-            '*' { respond hotel, [status: CREATED] }
-        }
+        redirect(action: "showHotels")
     }
 
     def edit(Long id) {
         respond hotelService.get(id)
     }
 
-    def update(Hotel hotel) {
-        if (hotel == null) {
+    def update(Long id) {
+        if (id == null) {
             notFound()
             return
         }
-
         try {
-            hotelService.save(hotel)
+            hotelService.update(id, params)
         } catch (ValidationException e) {
             respond hotel.errors, view: 'edit'
             return
         }
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'hotel.label', default: 'Hotel'), hotel.id])
-                redirect hotel
-            }
-            '*' { respond hotel, [status: OK] }
-        }
+        redirect(action: "showHotels")
     }
 
     def delete(Long id) {
@@ -89,16 +85,8 @@ class HotelController {
             notFound()
             return
         }
-
         hotelService.delete(id)
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'hotel.label', default: 'Hotel'), id])
-                redirect action: "index", method: "GET"
-            }
-            '*' { render status: NO_CONTENT }
-        }
+        redirect action: "showHotels", method: "GET"
     }
 
     protected void notFound() {

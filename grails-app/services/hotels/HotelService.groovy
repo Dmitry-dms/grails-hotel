@@ -7,8 +7,8 @@ class HotelService {
         return Hotel.list(params)
     }
 
-    List<Hotel> allHotels = Hotel.list()
-    String selectedCountry, searchString
+    String selectedCountry = ""
+    String searchString = ""
 
     List<Hotel> findHotelsSubstring(GrailsParameterMap params) {
         if (params.search_subsctr != null) {
@@ -22,22 +22,29 @@ class HotelService {
         if (selectedCountry == "") {
             results = c.list {
                 like("name", "%$searchString%")
-                and {
-                    order("stars", "desc")
-                    order("name", "asc")
-                }
+                order("stars", "desc")
+                order("name", "asc")
             }
         } else {
             results = c.list {
                 like("name", "%$searchString%")
                 eq("country", Country.findByName(selectedCountry))
-                and {
-                    order("stars", "desc")
-                    order("name", "asc")
-                }
+                order("stars", "desc")
+                order("name", "asc")
             }
         }
         results
+    }
+
+    def save(GrailsParameterMap params) {
+        Hotel h = new Hotel(name: params.name, stars: params.stars, site: params.site)
+        def c = Country.findById(params.country.id)
+        h.country = c
+        if (!h.save()) {
+            h.errors.each {
+                println it
+            }
+        }
     }
 
     List<Hotel> getPaginated(GrailsParameterMap params, List<Hotel> hotels) {
@@ -56,16 +63,25 @@ class HotelService {
         Hotel.count()
     }
 
-    Hotel get(Serializable id) {
+    def get(Long id) {
         return Hotel.get(id)
     }
 
-    void delete(Serializable id) {
-        Hotel.delete(id)
+    def update(Long id, GrailsParameterMap params) {
+        Hotel hotel = get(id) as Hotel
+        hotel.properties = params
+        hotel.save(flush: true)
     }
 
-    Hotel save(Hotel hotel) {
-        return Hotel.update(hotel)
+    def delete(Long id) {
+        try {
+            Hotel hotel = get(id) as Hotel
+            hotel.delete(flush: true)
+        } catch (Exception e) {
+            println(e.getMessage())
+            return false
+        }
+        return true
     }
 
 }

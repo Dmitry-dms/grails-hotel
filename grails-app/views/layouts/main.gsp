@@ -18,7 +18,7 @@
 <div class="container">
     <header class="d-flex justify-content-center py-3">
         <ul class="nav nav-pills">
-            <li class="nav-item"><a href="${createLink(uri: '/')}" class="nav-link active" aria-current="page">Home</a></li>
+            <li class="nav-item"><a href="${createLink(uri: '/')}" class="nav-link active" aria-current="page">Главная</a></li>
             <g:link class="nav-item" controller="country" action="index">Справочник стран</g:link>
             <g:link class="nav-item" controller="hotel" action="index">Справочник отелей</g:link>
         </ul>

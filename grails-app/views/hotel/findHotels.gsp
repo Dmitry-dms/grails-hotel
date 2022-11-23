@@ -5,14 +5,16 @@
     <title><g:message code="default.list.label" args="[entityName]" /></title>
 </head>
 <body>
-<div id="content" role="main">
+<div id="content" role="main" style="background-color: #F5F5F5;">
+    <form action="/" method="post" style="margin:30px auto;width: auto">
+        <button type="submit" class="btn pmd-btn-raised pmd-ripple-effect btn-primary fab">Новый поиск</button>
+    </form>
     <g:if test="${hotelCount == 0}">
-        <h1>По вашему запросу ничего не найдено</h1>
+        <div style="display: flex;align-items: center; margin-top:20px">
+            <div class="h1-h">По вашему запросу ничего не найдено</div>
+        </div>
     </g:if>
     <g:else>
-        <form action="/" method="post" style="margin:30px auto;width: auto">
-            <button type="submit" class="btn pmd-btn-raised pmd-ripple-effect btn-primary fab">Новый поиск</button>
-        </form>
         <table class="custom">
             <thead>
             <tr class="custom">

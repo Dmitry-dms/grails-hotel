@@ -7,7 +7,7 @@
 </head>
 <body>
 <section class="row colset-2-its">
-    <form action="/hotel/showHotels" method="post" style="margin:30px auto;width: auto">
+    <form action="/hotel/findHotels" method="post" style="margin:30px auto;width: auto">
         <form class="card p-2" style="margin: 50px">
             <div class="input-group" style="width: 600px">
                 <g:textField class="form-control" style="width: 200px" name="search_subsctr" value="${searchString}"/>
@@ -32,7 +32,6 @@
             <thead>
             <tr class="custom">
                 <th class="custom" scope="col">Отель</th>
-                <th class="custom" scope="col">Страна</th>
                 <th class="custom" scope="col">Звездность</th>
             </tr>
             </thead>

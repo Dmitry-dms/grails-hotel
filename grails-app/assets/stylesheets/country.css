@@ -8,3 +8,10 @@
 .b {
   display: inline-block;
 }
+
+.h1-h {
+margin: 0 auto;
+font-family: monospace;
+  font-weight: bold;
+   font-size: 30px;
+}

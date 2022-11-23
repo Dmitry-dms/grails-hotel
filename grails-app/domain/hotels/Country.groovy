@@ -5,5 +5,7 @@ class Country {
 
     static hasMany = [hotels: Hotel]
     static constraints = {
+        name uniqie:true, blank:false, maxSize:255
+        capital blank:false, maxSize:128
     }
 }

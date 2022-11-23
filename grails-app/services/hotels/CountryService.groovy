@@ -40,20 +40,21 @@ class CountryService {
     }
 
     def save(Country country) {
-
-//        if (country.validate()) {
-            country.save()
-//        }
+        if (!country.save(flush: true)) {
+            country.errors.each {
+                println it
+            }
+        }
     }
 
     def get(Long id) {
-       return Country.get(id)
+       Country.get(id)
     }
 
     def update(Long id, GrailsParameterMap params) {
         Country country = get(id) as Country
         country.properties = params
-        country.save(flush:true)
+        save(country)
     }
 
     def delete(Long id) {

@@ -10,7 +10,7 @@
     <td class="custom">
         <g:each var="c" in="${1..hotel?.stars}">
             <img alt="Image placeholder"
-                 src="https://cdn-icons-png.flaticon.com/512/2107/2107957.png" width="32" height="32">
+                 src="https://cdn-icons-png.flaticon.com/512/2107/2107957.png" width="24" height="24">
         </g:each>
     </td>
 

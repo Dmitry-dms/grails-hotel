@@ -10,7 +10,7 @@ class UrlMappings {
         }
 
 //        "/"(view:"index")
-        "/"(controller:"hotel", action: "index")
+        "/"(controller:"hotel", action: "start")
         "500"(view:'/error')
         "404"(view:'/notFound')
     }

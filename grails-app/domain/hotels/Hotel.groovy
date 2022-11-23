@@ -6,5 +6,9 @@ class Hotel {
     Country country
     static belongsTo = [country: Country]
     static constraints = {
+        name(uniqie:true,blank:false,maxSize:255)
+        country(blank:false)
+        stars(range:1..5, blank:false)
+        site(blank:true,url:true,nullable: true)
     }
 }
