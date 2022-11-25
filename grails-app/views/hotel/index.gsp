@@ -26,7 +26,7 @@
     </div>
     <g:if test="${hotelsCount == 0}">
         <div style="display: flex;align-items: center; margin-top:20px">
-            <div class="h1-h"><g:message code="hotel.emptylist" /></div>
+            <div class="h1-h"><g:message code="hotel.emptyList" /></div>
         </div>
     </g:if>
     <g:else>

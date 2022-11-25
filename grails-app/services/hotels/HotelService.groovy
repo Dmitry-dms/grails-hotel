@@ -16,8 +16,9 @@ class HotelService {
         return searchHotelText
     }
 
-    void clearSearchInput() {
+    void clearInputs() {
         searchHotelText = ""
+        selectedCountry = ""
     }
 
     List<Hotel> findHotels(GrailsParameterMap params) {

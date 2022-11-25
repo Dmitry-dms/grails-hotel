@@ -6,9 +6,6 @@ import grails.web.servlet.mvc.GrailsParameterMap
 
 
 class CountryService {
-    List<Country> list(GrailsParameterMap params) {
-        return Country.list(params)
-    }
 
     private String searchCountryText = ""
 

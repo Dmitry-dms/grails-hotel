@@ -4,8 +4,6 @@ import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
 
 
-
-
 class CountryController {
 
     CountryService countryService
@@ -14,16 +12,15 @@ class CountryController {
     HotelService hotelService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def maxPageElements = grailsApplication.config.getProperty('ui.default_max_elements', Integer, 10)
+    private Integer maxPageElements = grailsApplication.config.getProperty('ui.default_max_elements', Integer, 10)
 
-    def index(Integer max,Integer offset) {
-        hotelService.clearSearchInput()
+    def index(Integer max, Integer offset) {
         params.max = max ?: maxPageElements
         params.offset = offset ?: 0
-
+        hotelService.clearInputs()
         def res = countryService.findCountries(params)
-        respond res, model: [countries    : res,
-                             countriesCount: res.getTotalCount(),
+        respond res, model: [countries      : res,
+                             countriesCount : res.getTotalCount(),
                              inputSearchText: countryService.getSearchInput()]
     }
 
@@ -44,7 +41,7 @@ class CountryController {
             respond country.errors, view: 'create'
             return
         }
-        flash.save=message(code: 'country.tip.create')
+        flash.save = message(code: 'country.tip.create')
         redirect(action: "index")
     }
 
@@ -64,7 +61,7 @@ class CountryController {
             respond country.errors, view: 'edit'
             return
         }
-        flash.update=message(code: 'country.tip.update')
+        flash.update = message(code: 'country.tip.update')
         redirect(action: "index")
     }
 
@@ -73,8 +70,10 @@ class CountryController {
             notFound()
             return
         }
-        if (countryService.delete(id)){
-            flash.delete=message(code: 'country.tip.delete')
+        if (countryService.delete(id)) {
+            flash.delete = message(code: 'country.tip.delete')
+        } else {
+            flash.delete_error = message(code: 'error.delete')
         }
 
         redirect action: "index", method: "GET"

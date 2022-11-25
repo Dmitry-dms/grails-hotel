@@ -600,3 +600,7 @@ img.grails-logo {
  width:100%;
  border-top:1px solid gray;
 }
+
+.message {
+font-size:16px
+}

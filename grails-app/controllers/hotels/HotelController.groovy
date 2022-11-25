@@ -9,12 +9,11 @@ class HotelController {
     CountryService countryService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
-    def maxPageElements = grailsApplication.config.getProperty('ui.default_max_elements', Integer, 10)
+
+    private Integer maxPageElements = grailsApplication.config.getProperty('ui.default_max_elements', Integer, 10)
 
     // Отображается на главной
     def start() {
-        hotelService.clearSearchInput()
-        countryService.clearSearchInput()
         render(view: "start", model: [countries      : Country.list(),
                                       inputSearchText: hotelService.getSearchInput()])
     }
@@ -35,9 +34,9 @@ class HotelController {
         params.max = max ?: maxPageElements
         params.offset = offset ?: 0
         def res = hotelService.findHotels(params)
-        render(view: "findHotels",
-                model: [hotels    : res,
-                        hotelCount: res.getTotalCount()])
+        hotelService.clearInputs()
+        countryService.clearSearchInput()
+        render(view: "findHotels", model: [hotels    : res, hotelCount: res.getTotalCount()])
     }
 
 
@@ -53,7 +52,7 @@ class HotelController {
             respond hotel.errors, view: 'create'
             return
         }
-        flash.save=message(code: 'hotel.tip.create')
+        flash.save = message(code: 'hotel.tip.create')
         redirect(action: "index")
     }
 
@@ -73,7 +72,7 @@ class HotelController {
             respond hotel.errors, view: 'edit'
             return
         }
-        flash.update=message(code: 'hotel.tip.update')
+        flash.update = message(code: 'hotel.tip.update')
         redirect(action: "index")
     }
 
@@ -83,7 +82,9 @@ class HotelController {
             return
         }
         if (hotelService.delete(id)) {
-            flash.delete=message(code: 'hotel.tip.delete')
+            flash.delete = message(code: 'hotel.tip.delete')
+        } else {
+            flash.delete_error = message(code: 'error.delete')
         }
         redirect action: "index", method: "GET"
     }
