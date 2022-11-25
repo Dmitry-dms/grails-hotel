@@ -13,9 +13,9 @@
         </g:if>
         <g:form resource="${this.country}" method="POST" action="update" >
             <fieldset class="form" >
-                <f:field bean="country" property="name" label="Название"/>
-                <f:field bean="country" property="capital" label="Столица"/>
-                <button type="submit" class="btn pmd-btn-raised pmd-ripple-effect btn-primary" style="margin-top:20px; right:0;">Обновить</button>
+                <f:field bean="country" property="name" label="${g.message(code: "country.update.name")}" />
+                <f:field bean="country" property="capital" label="${g.message(code: "country.update.capital")}"/>
+                <button type="submit" class="btn pmd-btn-raised pmd-ripple-effect btn-primary" style="margin-top:20px; right:0;"><g:message code="button.update" /></button>
             </fieldset>
         </g:form>
     </div>

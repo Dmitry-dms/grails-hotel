@@ -3,7 +3,7 @@
     <td class="custom">
         ${hotel?.name}
         <g:if test="${hotel.site != null}">
-            <g:link target="_blank" base="${hotel.site}">Сайт</g:link>
+            <g:link target="_blank" base="${hotel.site}"><g:message code="table.site" /></g:link>
         </g:if>
     </td>
 

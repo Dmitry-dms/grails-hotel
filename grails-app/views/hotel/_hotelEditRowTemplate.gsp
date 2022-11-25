@@ -3,7 +3,7 @@
     <td class="custom">
         ${hotel?.name}
         <g:if test="${hotel.site != null}">
-            <g:link target="_blank" base="${hotel.site}">Сайт</g:link>
+            <g:link target="_blank" base="${hotel.site}"><g:message code="table.site" /></g:link>
         </g:if>
     </td>
 
@@ -19,11 +19,14 @@
                 <div class="col align-items-end">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <g:link class="edit" action="edit" resource="${hotel}">
-                            <button type="submit" class="btn btn-primary" style="margin-right:10px">Редактировать
+                            <button type="submit" class="btn btn-primary" style="margin-right:10px">
+                                <g:message code="button.edit" />
                             </button>
                         </g:link>
                         <g:form resource="${hotel}" method="DELETE">
-                            <button type="submit" class="btn btn-primary">Удалить</button>
+                            <button type="submit" class="btn btn-primary">
+                                <g:message code="button.delete" />
+                            </button>
                         </g:form>
                     </div>
                 </div>

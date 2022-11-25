@@ -9,29 +9,30 @@ class HotelController {
     CountryService countryService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    def maxPageElements = grailsApplication.config.getProperty('ui.default_max_elements', Integer, 10)
 
     // Отображается на главной
     def start() {
         hotelService.clearSearchInput()
         countryService.clearSearchInput()
-        render(view: "start", model: [countries   : Country.list(),
+        render(view: "start", model: [countries      : Country.list(),
                                       inputSearchText: hotelService.getSearchInput()])
     }
 
     def index(Integer max, Integer offset) {
         countryService.clearSearchInput()
-        params.max = max ?: 5
+        params.max = max ?: maxPageElements
         params.offset = offset ?: 0
         def res = hotelService.findHotels(params)
-        respond res, model: [hotels     : res,
-                             hotelsCount: res.getTotalCount(),
+        respond res, model: [hotels         : res,
+                             hotelsCount    : res.getTotalCount(),
                              inputSearchText: hotelService.getSearchInput()]
     }
 
 
     // Используется в поиске с главной страницы
-    def findHotels(Integer max,Integer offset) {
-        params.max = max ?: 5
+    def findHotels(Integer max, Integer offset) {
+        params.max = max ?: maxPageElements
         params.offset = offset ?: 0
         def res = hotelService.findHotels(params)
         render(view: "findHotels",

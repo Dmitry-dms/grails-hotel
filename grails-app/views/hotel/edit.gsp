@@ -13,15 +13,15 @@
         </g:if>
         <g:form resource="${this.hotel}" method="POST" action="update">
             <fieldset class="form">
-                <f:field bean="hotel" property="name" label="Название"/>
-                <f:field bean="hotel" property="site" label="Сайт"/>
-                <f:field bean="hotel" property="stars" label="Звездность"/>
-                <f:field bean="hotel" property="country" label="Страна"/>
+                <f:field bean="hotel" property="name" label="${g.message(code: "hotel.update.name")}"/>
+                <f:field bean="hotel" property="site" label="${g.message(code: "hotel.update.site")}"/>
+                <f:field bean="hotel" property="stars" label="${g.message(code: "hotel.update.stars")}"/>
+                <f:field bean="hotel" property="country" label="${g.message(code: "hotel.update.country")}"/>
 <!--                <fieldset class="embedded hotel">-->
 <!--                    <f:field bean="hotel" property="country.name" label="Страна"/>-->
 <!--                </fieldset>-->
                 <button type="submit" class="btn pmd-btn-raised pmd-ripple-effect btn-primary"
-                        style="margin-top:20px; right:0;">Обновить
+                        style="margin-top:20px; right:0;"><g:message code="button.update" />
                 </button>
             </fieldset>
         </g:form>

@@ -14,9 +14,11 @@ class CountryController {
     HotelService hotelService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max,Integer offset,String hotelTextInput) {
+    def maxPageElements = grailsApplication.config.getProperty('ui.default_max_elements', Integer, 10)
+
+    def index(Integer max,Integer offset) {
         hotelService.clearSearchInput()
-        params.max = max ?: 10
+        params.max = max ?: maxPageElements
         params.offset = offset ?: 0
 
         def res = countryService.findCountries(params)

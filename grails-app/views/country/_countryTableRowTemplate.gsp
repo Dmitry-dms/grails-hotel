@@ -13,11 +13,12 @@
                 <div class="col align-items-end">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <g:link class="edit" action="edit" resource="${country}">
-                            <button type="submit" class="btn btn-primary" style="margin-right:10px">Редактировать
+                            <button type="submit" class="btn btn-primary" style="margin-right:10px">
+                                <g:message code="button.edit" />
                             </button>
                         </g:link>
                         <g:form resource="${country}" method="DELETE">
-                            <button type="submit" class="btn btn-primary">Удалить</button>
+                            <button type="submit" class="btn btn-primary"><g:message code="button.delete" /></button>
                         </g:form>
                     </div>
                 </div>
