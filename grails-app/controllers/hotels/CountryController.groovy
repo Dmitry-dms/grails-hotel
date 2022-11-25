@@ -29,7 +29,7 @@ class CountryController {
 
 
     def create() {
-        respond new Country(name: params.name,capital: params.capital)
+        respond new Country(params)
     }
 
     def save(Country country) {
@@ -40,10 +40,11 @@ class CountryController {
         try {
             countryService.save(country)
         } catch (ValidationException e) {
-            flash.error = "Страна уже присуствует в базе данных"
+            flash.error = message(code: 'validation_error')
             respond country.errors, view: 'create'
             return
         }
+        flash.save=message(code: 'country.tip.create')
         redirect(action: "index")
     }
 
@@ -59,10 +60,11 @@ class CountryController {
         try {
             countryService.update(country)
         } catch (ValidationException e) {
-            flash.error = "Введенные данные соотвествуют существующей записи в базе данных"
+            flash.error = message(code: 'validation_error')
             respond country.errors, view: 'edit'
             return
         }
+        flash.update=message(code: 'country.tip.update')
         redirect(action: "index")
     }
 
@@ -71,7 +73,9 @@ class CountryController {
             notFound()
             return
         }
-        countryService.delete(id)
+        if (countryService.delete(id)){
+            flash.delete=message(code: 'country.tip.delete')
+        }
 
         redirect action: "index", method: "GET"
     }

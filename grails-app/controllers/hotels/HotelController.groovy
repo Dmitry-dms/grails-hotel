@@ -49,10 +49,11 @@ class HotelController {
         try {
             hotelService.save(hotel)
         } catch (ValidationException e) {
-            flash.error = "Отель уже присуствует в базе данных"
+            flash.error = message(code: 'validation_error')
             respond hotel.errors, view: 'create'
             return
         }
+        flash.save=message(code: 'hotel.tip.create')
         redirect(action: "index")
     }
 
@@ -68,10 +69,11 @@ class HotelController {
         try {
             hotelService.update(hotel)
         } catch (ValidationException e) {
-            flash.error = "Введенные данные соотвествуют существующей записи в базе данных"
+            flash.error = message(code: 'validation_error')
             respond hotel.errors, view: 'edit'
             return
         }
+        flash.update=message(code: 'hotel.tip.update')
         redirect(action: "index")
     }
 
@@ -80,7 +82,9 @@ class HotelController {
             notFound()
             return
         }
-        hotelService.delete(id)
+        if (hotelService.delete(id)) {
+            flash.delete=message(code: 'hotel.tip.delete')
+        }
         redirect action: "index", method: "GET"
     }
 

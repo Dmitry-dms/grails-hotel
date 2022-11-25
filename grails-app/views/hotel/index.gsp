@@ -17,6 +17,8 @@
     </form>
 </section>
 <div id="content" role="main" style="background-color: #F5F5F5;">
+    <g:render template="/crudTemplate" model="[flash: flash]"/>
+
     <div style="display: flex;align-items: end">
         <form action="/hotel/create" method="post" class="create">
             <button type="submit" class="btn pmd-btn-raised pmd-ripple-effect btn-primary"><g:message code="button.create" /></button>
