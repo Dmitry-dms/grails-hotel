@@ -3,6 +3,9 @@ package hotels
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
 
+
+
+
 class CountryController {
 
     CountryService countryService
@@ -11,25 +14,31 @@ class CountryController {
     HotelService hotelService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max,Integer offset) {
-        hotelService.searchString = ""
-        params.max = max ?: 3
+    def index(Integer max,Integer offset,String hotelTextInput) {
+        hotelService.clearSearchInput()
+        params.max = max ?: 10
         params.offset = offset ?: 0
-        def res = countryService.findCountrySubstring(params)
+
+        def res = countryService.findCountries(params)
         respond res, model: [countries    : res,
                              countriesCount: res.getTotalCount(),
-                             searchString: countryService.searchString]
+                             inputSearchText: countryService.getSearchInput()]
     }
 
 
     def create() {
-        respond new Country(params)
+        respond new Country(name: params.name,capital: params.capital)
     }
 
-    def save() {
+    def save(Country country) {
+        if (country == null) {
+            notFound()
+            return
+        }
         try {
-            countryService.save(params)
+            countryService.save(country)
         } catch (ValidationException e) {
+            flash.error = "Страна уже присуствует в базе данных"
             respond country.errors, view: 'create'
             return
         }
@@ -40,14 +49,15 @@ class CountryController {
         respond countryService.get(id)
     }
 
-    def update(Long id) {
-        if (id == null) {
+    def update(Country country) {
+        if (country == null) {
             notFound()
             return
         }
         try {
-            countryService.update(id, params)
+            countryService.update(country)
         } catch (ValidationException e) {
+            flash.error = "Введенные данные соотвествуют существующей записи в базе данных"
             respond country.errors, view: 'edit'
             return
         }

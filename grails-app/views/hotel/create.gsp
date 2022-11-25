@@ -8,6 +8,11 @@
 <body>
 <div class="card mx-auto" style="width:450px">
     <div class="content scaffold-create" role="main">
+        <g:if test="${flash.error}">
+            <ul class="errors" role="alert">
+                <g:message error="${flash.error}"/>
+            </ul>
+        </g:if>
         <g:form resource="${this.hotel}" method="POST" action="save">
             <fieldset class="form">
                 <f:field bean="hotel" property="name" label="Название"/>

@@ -9,7 +9,7 @@
     <form action="/country/index" method="post" style="margin:30px auto;width: auto">
         <form class="card p-2" style="margin: 50px">
             <div class="input-group" style="width: 600px">
-                <g:textField class="form-control" style="width: 200px" name="search_subsctr" value="${searchString}"/>
+                <g:textField class="form-control" style="width: 200px" name="countryTextInput" value="${inputSearchText}"/>
                 <button type="submit" class="btn btn-secondary">Найти</button>
             </div>
         </form>

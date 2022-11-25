@@ -12,20 +12,20 @@ class HotelController {
 
     // Отображается на главной
     def start() {
-        hotelService.searchString = ""
-        countryService.searchString = ""
+        hotelService.clearSearchInput()
+        countryService.clearSearchInput()
         render(view: "start", model: [countries   : Country.list(),
-                                      searchString: hotelService.searchString])
+                                      inputSearchText: hotelService.getSearchInput()])
     }
 
     def index(Integer max, Integer offset) {
-        countryService.searchString = ""
+        countryService.clearSearchInput()
         params.max = max ?: 5
         params.offset = offset ?: 0
-        def res = hotelService.findHotelsSubstring(params)
+        def res = hotelService.findHotels(params)
         respond res, model: [hotels     : res,
                              hotelsCount: res.getTotalCount(),
-                             searchString: hotelService.searchString]
+                             inputSearchText: hotelService.getSearchInput()]
     }
 
 
@@ -33,46 +33,45 @@ class HotelController {
     def findHotels(Integer max,Integer offset) {
         params.max = max ?: 5
         params.offset = offset ?: 0
-        def results = hotelService.findHotelsSubstring(params)
+        def res = hotelService.findHotels(params)
         render(view: "findHotels",
-                model: [hotels    : results,
-                        hotelCount: results.getTotalCount()])
+                model: [hotels    : res,
+                        hotelCount: res.getTotalCount()])
     }
 
-    def show(Long id) {
-        respond hotelService.get(id)
-    }
 
     def create() {
         respond new Hotel(params)
     }
 
-    def save() {
+    def save(Hotel hotel) {
         try {
-            hotelService.save(params)
+            hotelService.save(hotel)
         } catch (ValidationException e) {
+            flash.error = "Отель уже присуствует в базе данных"
             respond hotel.errors, view: 'create'
             return
         }
-        redirect(action: "showHotels")
+        redirect(action: "index")
     }
 
     def edit(Long id) {
         respond hotelService.get(id)
     }
 
-    def update(Long id) {
-        if (id == null) {
+    def update(Hotel hotel) {
+        if (hotel == null) {
             notFound()
             return
         }
         try {
-            hotelService.update(id, params)
+            hotelService.update(hotel)
         } catch (ValidationException e) {
+            flash.error = "Введенные данные соотвествуют существующей записи в базе данных"
             respond hotel.errors, view: 'edit'
             return
         }
-        redirect(action: "showHotels")
+        redirect(action: "index")
     }
 
     def delete(Long id) {
@@ -81,7 +80,7 @@ class HotelController {
             return
         }
         hotelService.delete(id)
-        redirect action: "showHotels", method: "GET"
+        redirect action: "index", method: "GET"
     }
 
     protected void notFound() {

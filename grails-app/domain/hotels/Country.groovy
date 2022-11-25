@@ -1,11 +1,12 @@
 package hotels
 
 class Country {
-    String name, capital
+    String name
+    String capital
 
     static hasMany = [hotels: Hotel]
     static constraints = {
-        name uniqie:true, blank:false, maxSize:255
-        capital blank:false, maxSize:128
+        name unique:true, blank:false, maxSize:255
+        capital unique:true,blank:false, maxSize:128
     }
 }

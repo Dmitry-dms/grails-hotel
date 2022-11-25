@@ -1,5 +1,7 @@
 package hotels
 
+
+import grails.validation.ValidationException
 import grails.web.servlet.mvc.GrailsParameterMap
 
 
@@ -8,30 +10,33 @@ class CountryService {
         return Country.list(params)
     }
 
-    String searchString = ""
+    private String searchCountryText = ""
 
-    List<Country> findCountrySubstring(GrailsParameterMap params) {
-        if (params.search_subsctr != null) {
-            searchString = params.search_subsctr
+    String getSearchInput() {
+        return searchCountryText
+    }
+
+    void clearSearchInput() {
+        searchCountryText = ""
+    }
+
+    def findCountries(GrailsParameterMap params) {
+        if (params.countryTextInput != null) {
+            searchCountryText = params.countryTextInput
         }
         def c = Country.createCriteria()
         def results = c.list(max: params.max, offset: params.offset) {
-            like("name", "%$searchString%")
+            ilike("name", "%${searchCountryText}%")
         }
         results
     }
 
 
-    int count() {
-        Country.count()
-    }
-
-    def save(GrailsParameterMap params) {
-        Country country = new Country(params)
-        if (!country.save(flush: true)) {
-            country.errors.each {
-                println it
-            }
+    void save(Country country) throws ValidationException {
+        if (country.validate()) {
+            country.save(flush: true)
+        } else {
+            throw new ValidationException("Failed to validate", country.errors)
         }
     }
 
@@ -39,19 +44,17 @@ class CountryService {
         Country.get(id)
     }
 
-    def update(Long id, GrailsParameterMap params) {
-        Country country = get(id) as Country
-        country.properties = params
-        if (!country.save(flush: true)) {
-            country.errors.each {
-                println it
-            }
+    void update(Country country) throws ValidationException{
+        if (country.validate()) {
+            country.save(flush: true)
+        } else {
+            throw new ValidationException("Failed to validate", country.errors)
         }
     }
 
     def delete(Long id) {
         try {
-            Country c = get(id) as Country
+            def c = get(id)
             c.delete(flush: true)
         } catch (Exception e) {
             println(e.getMessage())
