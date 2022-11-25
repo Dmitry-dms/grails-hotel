@@ -11,14 +11,6 @@ class CountryService {
     String searchString = ""
 
     List<Country> findCountrySubstring(GrailsParameterMap params) {
-//        params.max = params.max ?: 3
-//        params.offset = params.offset ?: 0
-//        if (params.max instanceof String) {
-//            params.max = Integer.parseInt(params.max)
-//        }
-//        if (params.offset instanceof String) {
-//            params.offset = Integer.parseInt(params.offset)
-//        }
         if (params.search_subsctr != null) {
             searchString = params.search_subsctr
         }

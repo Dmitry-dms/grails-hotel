@@ -6,35 +6,28 @@ import static org.springframework.http.HttpStatus.*
 class HotelController {
 
     HotelService hotelService
+    CountryService countryService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     // Отображается на главной
     def start() {
         hotelService.searchString = ""
+        countryService.searchString = ""
         render(view: "start", model: [countries   : Country.list(),
                                       searchString: hotelService.searchString])
     }
 
     def index(Integer max, Integer offset) {
+        countryService.searchString = ""
         params.max = max ?: 5
         params.offset = offset ?: 0
-        def res = hotelService.list(params)
+        def res = hotelService.findHotelsSubstring(params)
         respond res, model: [hotels     : res,
-                             countries  : Country.list(),
-                             hotelsCount: res.getTotalCount()]
+                             hotelsCount: res.getTotalCount(),
+                             searchString: hotelService.searchString]
     }
 
-    // Используется в поиске со справочника отелей
-    def showHotels(Integer max,Integer offset) {
-        params.max = max ?: 5
-        params.offset = offset ?: 0
-        def results = hotelService.findHotelsSubstring(params)
-        render(view: "index", model: [hotels     : results,
-                                      hotelsCount: results.getTotalCount(),
-                                      searchString: hotelService.searchString]
-        )
-    }
 
     // Используется в поиске с главной страницы
     def findHotels(Integer max,Integer offset) {

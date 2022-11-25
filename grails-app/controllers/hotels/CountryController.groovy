@@ -6,24 +6,19 @@ import static org.springframework.http.HttpStatus.*
 class CountryController {
 
     CountryService countryService
-
+    // Необходимо обнулить поисковую строку при переходе в другой пункт меню.
+    // FIXME(@Dmitry-dms): Есть ли лучший способ? Жизненный цикл контроллера?
+    HotelService hotelService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max,Integer offset) {
-        params.max = Math.min(max ?: 3, 100)
-        params.offset = offset ?: 0
-        def res = countryService.list(params)
-        respond res, model: [countries    : res,
-                             countriesCount: countryService.count()]
-    }
-
-    def findCountries(Integer max,Integer offset) {
+        hotelService.searchString = ""
         params.max = max ?: 3
         params.offset = offset ?: 0
-        def results = countryService.findCountrySubstring(params)
-        render(view: "index", model: [countries     : results,
-                                      countriesCount: results.getTotalCount(),
-                                      searchString: countryService.searchString])
+        def res = countryService.findCountrySubstring(params)
+        respond res, model: [countries    : res,
+                             countriesCount: res.getTotalCount(),
+                             searchString: countryService.searchString]
     }
 
 
