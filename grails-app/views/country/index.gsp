@@ -42,7 +42,7 @@
             </g:each>
             </tbody>
         </table>
-        <g:if test="${countriesCount > 10}">
+        <g:if test="${countriesCount > 3}">
             <div class="pagination pag">
                 <g:paginate total="${countriesCount ?: 0}" next="Вперед" prev="Назад"/>
             </div>

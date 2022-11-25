@@ -11,36 +11,39 @@ class HotelController {
 
     // Отображается на главной
     def start() {
+        hotelService.searchString = ""
         render(view: "start", model: [countries   : Country.list(),
                                       searchString: hotelService.searchString])
     }
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+    def index(Integer max, Integer offset) {
+        params.max = max ?: 5
+        params.offset = offset ?: 0
         def res = hotelService.list(params)
         respond res, model: [hotels     : res,
                              countries  : Country.list(),
-                             hotelsCount: hotelService.count()]
+                             hotelsCount: res.getTotalCount()]
     }
 
     // Используется в поиске со справочника отелей
-    def showHotels(Integer max) {
-        ArrayList<Hotel> results = hotelService.findHotelsSubstring(params)
-        ArrayList<Hotel> paginated = hotelService.getPaginated(params, results)
-        render(view: "index", model: [hotels     : paginated,
-                                      hotelsCount: results.size(), searchString: hotelService.searchString]
+    def showHotels(Integer max,Integer offset) {
+        params.max = max ?: 5
+        params.offset = offset ?: 0
+        def results = hotelService.findHotelsSubstring(params)
+        render(view: "index", model: [hotels     : results,
+                                      hotelsCount: results.getTotalCount(),
+                                      searchString: hotelService.searchString]
         )
-        hotelService.searchString = ""
     }
 
     // Используется в поиске с главной страницы
-    def findHotels(Integer max) {
-        ArrayList<Hotel> results = hotelService.findHotelsSubstring(params)
-        ArrayList<Hotel> paginated = hotelService.getPaginated(params, results)
+    def findHotels(Integer max,Integer offset) {
+        params.max = max ?: 5
+        params.offset = offset ?: 0
+        def results = hotelService.findHotelsSubstring(params)
         render(view: "findHotels",
-                model: [hotels    : paginated,
-                        hotelCount: results.size()])
-        hotelService.searchString = ""
+                model: [hotels    : results,
+                        hotelCount: results.getTotalCount()])
     }
 
     def show(Long id) {

@@ -11,28 +11,24 @@ class CountryService {
     String searchString = ""
 
     List<Country> findCountrySubstring(GrailsParameterMap params) {
+//        params.max = params.max ?: 3
+//        params.offset = params.offset ?: 0
+//        if (params.max instanceof String) {
+//            params.max = Integer.parseInt(params.max)
+//        }
+//        if (params.offset instanceof String) {
+//            params.offset = Integer.parseInt(params.offset)
+//        }
         if (params.search_subsctr != null) {
             searchString = params.search_subsctr
         }
-        ArrayList<Country> results
         def c = Country.createCriteria()
-        results = c.list {
+        def results = c.list(max: params.max, offset: params.offset) {
             like("name", "%$searchString%")
         }
         results
     }
 
-    List<Country> getPaginated(GrailsParameterMap params, List<Country> countries) {
-        params.max = params.max ?: 10
-        params.offset = params.offset ?: 0
-        if (params.max instanceof String) {
-            params.max = Integer.parseInt(params.max)
-        }
-        if (params.offset instanceof String) {
-            params.offset = Integer.parseInt(params.offset)
-        }
-        countries.drop(params.offset).take(params.max) as List<Country>
-    }
 
     int count() {
         Country.count()
@@ -48,7 +44,7 @@ class CountryService {
     }
 
     def get(Long id) {
-       Country.get(id)
+        Country.get(id)
     }
 
     def update(Long id, GrailsParameterMap params) {

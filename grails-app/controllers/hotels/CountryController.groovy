@@ -9,20 +9,20 @@ class CountryController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+    def index(Integer max,Integer offset) {
+        params.max = Math.min(max ?: 3, 100)
+        params.offset = offset ?: 0
         def res = countryService.list(params)
         respond res, model: [countries    : res,
                              countriesCount: countryService.count()]
     }
 
-    def findCountries(Integer max) {
-
-        ArrayList<Country> results = countryService.findCountrySubstring(params)
-        ArrayList<Country> paginated = countryService.getPaginated(params, results)
-
-        render(view: "index", model: [countries     : paginated,
-                                      countriesCount: results.size(),
+    def findCountries(Integer max,Integer offset) {
+        params.max = max ?: 3
+        params.offset = offset ?: 0
+        def results = countryService.findCountrySubstring(params)
+        render(view: "index", model: [countries     : results,
+                                      countriesCount: results.getTotalCount(),
                                       searchString: countryService.searchString])
     }
 
