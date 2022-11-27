@@ -5,7 +5,7 @@ import groovy.json.JsonSlurper
 class BootStrap {
 
     def init = { servletContext ->
-        def countries = ['Russia':'Moscow','Britain':'London','Japan':'Tokyo','USA':'Washington','France':'Paris'].collect {
+        def countries = ['Россия':'Москва','Япония':'Токио','США':'Вашингтон','Франция':'Париж'].collect {
             k,v ->
                new Country(name: k,capital: v).save()
         }

@@ -18,10 +18,18 @@
                 <f:field bean="hotel" property="name" label="${g.message(code: "hotel.update.name")}"/>
                 <f:field bean="hotel" property="site" label="${g.message(code: "hotel.update.site")}"/>
                 <f:field bean="hotel" property="stars" label="${g.message(code: "hotel.update.stars")}"/>
-                <f:field bean="hotel" property="country" label="${g.message(code: "hotel.update.country")}"/>
-<!--                <fieldset class="embedded hotel">-->
-<!--                    <f:field bean="hotel" property="country.name" label="Страна"/>-->
-<!--                </fieldset>-->
+                <div class="row">
+                    <div class="col-md-auto" style="align-self:center">
+                        <g:message code="hotel.update.country"/>
+                    </div>
+                    <div class="col-md-auto">
+                        <g:select class="form-control" value="${hotel?.country?.id}" name="country"
+                                  from="${countries}"
+                                  optionValue="name"
+                                  optionKey="id"
+                        />
+                    </div>
+                </div>
                 <button type="submit" class="btn pmd-btn-raised pmd-ripple-effect btn-primary"
                         style="margin-top:20px; right:0;"><g:message code="button.create" />
                 </button>

@@ -36,12 +36,12 @@ class HotelController {
         def res = hotelService.findHotels(params)
         hotelService.clearInputs()
         countryService.clearSearchInput()
-        render(view: "findHotels", model: [hotels    : res, hotelCount: res.getTotalCount()])
+        render(view: "findHotels", model: [hotels: res, hotelCount: res.getTotalCount()])
     }
 
 
     def create() {
-        respond new Hotel(params)
+        respond new Hotel(params), model: [countries: Country.list()]
     }
 
     def save(Hotel hotel) {
@@ -49,7 +49,7 @@ class HotelController {
             hotelService.save(hotel)
         } catch (ValidationException e) {
             flash.error = message(code: 'validation_error')
-            respond hotel.errors, view: 'create'
+            respond hotel.errors, view: 'create', model: [countries: Country.list()]
             return
         }
         flash.save = message(code: 'hotel.tip.create')
@@ -57,7 +57,7 @@ class HotelController {
     }
 
     def edit(Long id) {
-        respond hotelService.get(id)
+        respond hotelService.get(id), model: [countries: Country.list()]
     }
 
     def update(Hotel hotel) {
@@ -69,7 +69,7 @@ class HotelController {
             hotelService.update(hotel)
         } catch (ValidationException e) {
             flash.error = message(code: 'validation_error')
-            respond hotel.errors, view: 'edit'
+            respond hotel.errors, view: 'edit', model: [countries: Country.list()]
             return
         }
         flash.update = message(code: 'hotel.tip.update')
